@@ -39,7 +39,11 @@ Aplicação Full Stack para registro e acompanhamento de refeições diárias, d
 
 ## 🌐 Links
 
-Deploy no Vercel: meal-tracker-git-main-jotapwts-projects.vercel.app
-refeições armazenadas no banco de dados: https://meal-tracker-zx31.onrender.com/refeicoes
+- Deploy no Vercel: meal-tracker-git-main-jotapwts-projects.vercel.app
+- link público do deploy pela Render: https://meal-tracker-zx31.onrender.com
+- refeições armazenadas no banco de dados: https://meal-tracker-zx31.onrender.com/refeicoes
+
+
+
 
 
