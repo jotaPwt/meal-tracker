@@ -30,6 +30,11 @@ Aplicação Full Stack para registro e acompanhamento de refeições diárias, d
 **Backend:**
 - MongoDB Atlas (banco de dados)
 - Render (Serviço de nuvem) 
+- obs: (foi utilizado o serviço gratuito
+do render. O serviço entra em modo "descanso"
+após ficar certo tempo inativo, ao acessar o 
+site, é necessario esperar um pouco para o
+banco de dados "acordar"
 
 **Infraestrutura:**
 - Vercel (deploy)
