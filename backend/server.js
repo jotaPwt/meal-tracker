@@ -1,10 +1,15 @@
 
 const express = require('express');
+const cors = require('cors');
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const criarModeloRefeicao = require('./models/refeicaoModel.js');
 const criarRefeicaoRoutes = require('./routes/refeicaoRoutes');
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 app.use(express.static("public"));

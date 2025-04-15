@@ -56,7 +56,8 @@
 
     async function carregarRefeicoes() {
       try {
-        const response = await fetch("http://localhost:3000/refeicoes");
+        const response = await fetch("https://meal-tracker-zx31.onrender.com/api/refeicoes");
+
         refeicoes = await response.json();
         aplicarFiltro("all");
       } catch (err) {
@@ -107,7 +108,7 @@
 
     function deletarRefeicao(id) {
       if (confirm("Deseja realmente excluir esta refeição?")) {
-        fetch(`http://localhost:3000/refeicoes/${id}`, {
+        fetch(`https://meal-tracker-zx31.onrender.com/api/refeicoes/${id}`, {
           method: "DELETE"
         })
         .then(response => {
