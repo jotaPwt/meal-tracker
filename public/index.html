@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Tracker</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Meal Tracker</h1>
+      <a href="new.html" class="btn-primary">Adicionar Refeição</a>
+    </header>
+
+    <section class="stats">
+      <div class="card summary">
+        <h2>Resumo de Hoje</h2>
+        <p class="calorie-count"><span id="total-calories">0</span> calorias</p>
+      </div>
+    </section>
+
+    <section class="filter-controls">
+      <h2>Filtrar Refeições</h2>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="Breakfast">Café da manhã</button>
+        <button class="filter-btn" data-filter="Lunch">Almoço</button>
+        <button class="filter-btn" data-filter="Afternoon snack">Lanche da tarde</button>
+        <button class="filter-btn" data-filter="Dinner">Jantar</button>
+      </div>
+    </section>
+
+    <section class="meals-list">
+      <h2>Suas Refeições</h2>
+      <div id="meals-container">
+        <p class="empty-state" id="empty-state">Nenhuma refeição registrada.</p>
+      </div>
+    </section>
+
+    <div id="delete-modal" class="modal">
+      <div class="modal-content">
+        <h2>Confirmar Exclusão</h2>
+        <p>Você tem certeza que deseja excluir esta refeição?</p>
+        <div class="modal-actions">
+          <button id="confirm-delete" class="btn-danger">Excluir</button>
+          <button id="cancel-delete" class="btn-secondary">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let refeicoes = [];
+
+    async function carregarRefeicoes() {
+      try {
+        const response = await fetch("http://localhost:3000/refeicoes");
+        refeicoes = await response.json();
+        aplicarFiltro("all");
+      } catch (err) {
+        console.error("Erro ao buscar refeições:", err);
+      }
+    }
+
+    function aplicarFiltro(tipo) {
+      const lista = document.getElementById("meals-container");
+      const total = document.getElementById("total-calories");
+      lista.innerHTML = "";
+
+      const hoje = new Date().toISOString().split('T')[0];
+      let totalCalorias = 0;
+
+      const filtradas = refeicoes.filter(ref => {
+        const mesmaData = ref.date === hoje;
+        const mesmoTipo = tipo === "all" || ref.type === tipo;
+        return mesmaData && mesmoTipo;
+      });
+
+      if (filtradas.length === 0) {
+        lista.innerHTML = `<p class="empty-state">Nenhuma refeição encontrada.</p>`;
+      }
+
+      filtradas.forEach(ref => {
+        totalCalorias += ref.calories;
+
+        const div = document.createElement("div");
+        div.classList.add("meal-item");
+
+        div.innerHTML = `
+          <h3>${ref.name} <span>${ref.calories} kcal</span></h3>
+          <p>${ref.description || ""}</p>
+          <small>${ref.date} ${ref.time} - ${ref.type}</small>
+          <div class="actions">
+            <a href="edit.html?id=${ref._id}" class="btn-secondary">Editar</a>
+            <button class="btn-danger" onclick="deletarRefeicao('${ref._id}')">Excluir</button>
+          </div>
+        `;
+
+        lista.appendChild(div);
+      });
+
+      total.textContent = totalCalorias;
+      destacarBotao(tipo);
+    }
+
+    function deletarRefeicao(id) {
+      if (confirm("Deseja realmente excluir esta refeição?")) {
+        fetch(`http://localhost:3000/refeicoes/${id}`, {
+          method: "DELETE"
+        })
+        .then(response => {
+          if (response.ok) {
+            alert("Refeição excluída com sucesso.");
+            carregarRefeicoes();
+          } else {
+            alert("Erro ao excluir refeição.");
+          }
+        })
+        .catch(error => console.error("Erro ao excluir:", error));
+      }
+    }
+
+    function destacarBotao(tipo) {
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.remove("active");
+        if (btn.dataset.filter === tipo) {
+          btn.classList.add("active");
+        }
+      });
+    }
+
+    carregarRefeicoes();
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tipo = btn.dataset.filter;
+        aplicarFiltro(tipo);
+      });
+    });
+  </script>
+</body>
+</html>

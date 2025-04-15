@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Refeição - Meal Tracker</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Editar Refeição</h1>
+            <a href="index.html" class="btn-secondary">Voltar para o Painel</a>
+        </header>
+
+        <section class="form-container">
+            <form id="edit-meal-form">
+                <input type="hidden" id="meal-id" name="id">
+                
+                <div class="form-group">
+                    <label for="meal-name">Nome da refeição</label>
+                    <input type="text" id="meal-name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="meal-description">Descrição</label>
+                    <textarea id="meal-description" name="description" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="meal-calories">Calorias</label>
+                    <input type="number" id="meal-calories" name="calories" min="0" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="meal-date">Data</label>
+                        <input type="date" id="meal-date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meal-time">Hora</label>
+                        <input type="time" id="meal-time" name="time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="meal-type">tipo</label>
+                    <select id="meal-type" name="type" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="Breakfast">Café da Manhã</option>
+                        <option value="Lunch">Almoço</option>
+                        <option value="Afternoon snack">Refeição da tarde</option>
+                        <option value="Dinner">Janta</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Atualizar refeição</button>
+                    <a href="index.html" class="btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        function getIdFromUrl() {
+          const params = new URLSearchParams(window.location.search);
+          return params.get("id");
+        }
+      
+        async function carregarRefeicao() {
+          const id = getIdFromUrl();
+          if (!id) return;
+      
+          try {
+            const response = await fetch(`http://localhost:3000/refeicoes/${id}`);
+            const refeicao = await response.json();
+      
+            document.getElementById("meal-name").value = refeicao.name;
+            document.getElementById("meal-description").value = refeicao.description || "";
+            document.getElementById("meal-calories").value = refeicao.calories;
+            document.getElementById("meal-date").value = refeicao.date;
+            document.getElementById("meal-time").value = refeicao.time;
+            document.getElementById("meal-type").value = refeicao.type;
+          } catch (error) {
+            console.error("Erro ao carregar refeição:", error);
+          }
+        }
+      
+        const form = document.getElementById("edit-meal-form");
+      
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = getIdFromUrl();
+      
+          const refeicaoAtualizada = {
+            name: document.getElementById("meal-name").value,
+            description: document.getElementById("meal-description").value,
+            calories: Number(document.getElementById("meal-calories").value),
+            date: document.getElementById("meal-date").value,
+            time: document.getElementById("meal-time").value,
+            type: document.getElementById("meal-type").value
+          };
+      
+          try {
+            const response = await fetch(`http://localhost:3000/refeicoes/${id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(refeicaoAtualizada)
+            });
+      
+            if (response.ok) {
+              alert("Refeição atualizada com sucesso!");
+              window.location.href = "index.html";
+            } else {
+              alert("Erro ao atualizar refeição.");
+            }
+          } catch (error) {
+            console.error("Erro ao atualizar:", error);
+          }
+        });
+      
+        carregarRefeicao();
+      </script>
+      
+</body>
+</html>

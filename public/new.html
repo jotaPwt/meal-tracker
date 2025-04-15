@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adicionar Nova Refeição - Controle de Refeições</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Adicionar Nova Refeição</h1>
+      <a href="index.html" class="btn-secondary">Voltar para o Painel</a>
+    </header>
+
+    <section class="form-container">
+      <form id="meal-form">
+        <div class="form-group">
+          <label for="meal-name">Nome da Refeição</label>
+          <input type="text" id="meal-name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-description">Descrição</label>
+          <textarea id="meal-description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-calories">Calorias</label>
+          <input type="number" id="meal-calories" name="calories" min="0" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meal-date">Data</label>
+            <input type="date" id="meal-date" name="date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="meal-time">Hora</label>
+            <input type="time" id="meal-time" name="time" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-type">Tipo</label>
+          <select id="meal-type" name="type" required>
+            <option value="">Selecione o tipo</option>
+            <option value="Breakfast">Café da manhã</option>
+            <option value="Lunch">Almoço</option>
+            <option value="Afternoon snack">Lanche da tarde</option>
+            <option value="Dinner">Jantar</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Salvar Refeição</button>
+          <a href="index.html" class="btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById("meal-form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const meal = {
+        name: document.getElementById("meal-name").value,
+        description: document.getElementById("meal-description").value,
+        calories: Number(document.getElementById("meal-calories").value),
+        date: document.getElementById("meal-date").value,
+        time: document.getElementById("meal-time").value,
+        type: document.getElementById("meal-type").value
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/refeicoes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(meal)
+        });
+
+        if (response.ok) {
+          alert("Refeição salva com sucesso!");
+          window.location.href = "index.html";
+        } else {
+          alert("Erro ao salvar refeição.");
+        }
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    });
+  </script>
+</body>
+</html>
