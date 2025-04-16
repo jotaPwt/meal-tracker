@@ -28,25 +28,35 @@ Aplicação Full Stack para registro e acompanhamento de refeições diárias, d
 
 
 **Backend:**
-- MongoDB Atlas (banco de dados)
-- Render (Serviço de nuvem) 
-- obs: (foi utilizado o serviço gratuito
-do render. O serviço entra em modo "descanso"
-após ficar certo tempo inativo, ao acessar o 
-site, é necessario esperar um pouco para o
-banco de dados "acordar"
+
+- Node.js
+- Express
+- MongoDB Atlas (banco de dados em nuvem)
+- Render (serviço de hospedagem do servidor)
+
+- 📌 Obs.: O back-end está hospedado em uma instância gratuita da Render, que entra em modo "sleep" após alguns minutos de inatividade.
+Pode levar alguns segundos (~30s) para o servidor "acordar" quando acessado pela primeira vez.
+
+Infraestrutura
 
 **Infraestrutura:**
-- Vercel (deploy)
-- MongoDB Atlas (hosting do banco)
+
+- Vercel – Deploy do Frontend
+- Render – Deploy da API (Backend)
+- MongoDB Atlas – Banco de dados em nuvem
 
 
 
 ## 🌐 Links
 
-- Deploy no Vercel: https://meal-tracker-rust.vercel.app/
-- link público do deploy pela Render: https://meal-tracker-zx31.onrender.com
-- refeições armazenadas no banco de dados: https://meal-tracker-zx31.onrender.com/refeicoes
+🔗 Deploy do Frontend (Vercel):
+https://meal-tracker-rust.vercel.app/
+
+🔗 API do Backend (Render):
+https://meal-tracker-zx31.onrender.com
+
+🔗 Endpoint de Refeições (GET):
+https://meal-tracker-zx31.onrender.com/refeicoes
 
 
 
